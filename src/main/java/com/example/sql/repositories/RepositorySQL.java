@@ -32,21 +32,14 @@ public class RepositorySQL {
 
     public RepositorySQL(NamedParameterJdbcTemplate namedParameterJdbcTemplate, JdbcTemplate jdbcTemplate) {
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
-        sql = "schema.sql";
+        sql = read("schema.sql");
     }
 
 
 
     public List<String> getProductName(String name){
         SqlParameterSource parameterSource = new MapSqlParameterSource("name", name);
-        var nameResult = namedParameterJdbcTemplate.queryForList(read(sql), parameterSource,String.class
-//                new RowMapper<String>() {
-//            @Override
-//            public String mapRow(ResultSet rs, int rowNum) throws SQLException {
-//                return rs.getString("product_name");
-//            }
-//        }
-        );
+        var nameResult = namedParameterJdbcTemplate.queryForList(sql, parameterSource,String.class);
         return nameResult;
     }
 
