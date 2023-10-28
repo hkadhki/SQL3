@@ -5,6 +5,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 public class ControllerSQL {
     private final RepositorySQL repositorySQL;
@@ -13,7 +15,7 @@ public class ControllerSQL {
         this.repositorySQL = repositorySQL;
     }
     @GetMapping("/products/fetch-product")
-    public String getSqlSetup(@RequestParam String name) {
+    public List<String> getSqlSetup(@RequestParam String name) {
         return repositorySQL.getProductName(name);
     }
 }

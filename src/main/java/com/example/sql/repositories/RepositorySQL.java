@@ -18,6 +18,7 @@ import java.io.InputStreamReader;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -25,29 +26,28 @@ import java.util.stream.Collectors;
 public class RepositorySQL {
 
 
-    private static final String sql = "schema.sql";
-
-    private DataSource dataSource;
+    private static String sql;
 
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-    private final JdbcTemplate jdbcTemplate;
 
     public RepositorySQL(NamedParameterJdbcTemplate namedParameterJdbcTemplate, JdbcTemplate jdbcTemplate) {
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
-        this.jdbcTemplate = jdbcTemplate;
+        sql = "schema.sql";
     }
 
 
 
-    public String getProductName(String name){
+    public List<String> getProductName(String name){
         SqlParameterSource parameterSource = new MapSqlParameterSource("name", name);
-        var nameResult = namedParameterJdbcTemplate.query(read(sql), parameterSource,new RowMapper<String>() {
-            @Override
-            public String mapRow(ResultSet rs, int rowNum) throws SQLException {
-                return rs.getString("product_name");
-            }
-        });
-        return nameResult.toString();
+        var nameResult = namedParameterJdbcTemplate.queryForList(read(sql), parameterSource,String.class
+//                new RowMapper<String>() {
+//            @Override
+//            public String mapRow(ResultSet rs, int rowNum) throws SQLException {
+//                return rs.getString("product_name");
+//            }
+//        }
+        );
+        return nameResult;
     }
 
     private static String read(String scriptFileName) {
